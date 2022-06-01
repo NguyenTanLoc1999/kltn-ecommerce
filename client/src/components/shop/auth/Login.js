@@ -1,0 +1,170 @@
+import React, { Fragment, useState, useContext } from "react";
+import { loginReq } from "./fetchApi";
+import { LayoutContext } from "../index";
+import { GoogleLogin } from 'react-google-login';
+import {ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
+
+const Login = (props) => {
+  const { data: layoutData, dispatch: layoutDispatch } = useContext(
+    LayoutContext
+  );
+
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    error: false,
+    loading: true,
+  });
+  const alert = (msg) => <div className="text-xs text-red-500">{msg}</div>;
+
+  const formSubmit = async () => {
+    setData({ ...data, loading: true });
+    try {
+      let responseData = await loginReq({
+        email: data.email,
+        password: data.password,
+      });
+      if (responseData.error) {
+        setData({
+          ...data,
+          loading: false,
+          error: responseData.error,
+          password: "",
+        });
+      // toast.error("Invalid email or password")
+
+      } else if (responseData.token) {
+        setData({ email: "", password: "", loading: false, error: false });
+        localStorage.setItem("jwt", JSON.stringify(responseData));
+        window.location.href = "/";
+        toast.success("Login success")
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Invalid email or password")
+    }
+  };
+
+  const responseSuccessGoogle = (response) => {
+    //console.log(response);
+    axios({
+      method:"POST",
+      url:"http://localhost:8000/api/googlelogin",
+      data:{tokenId: response.tokenId}
+    }).then(response =>{
+      const { data } = response
+      setData({ email: "", password: "", loading: false, error: false });
+      localStorage.setItem("jwt", JSON.stringify(data));
+      window.location.href = "/";
+      toast.success("Login success")
+      // dispatch({
+      //   // type: authConstants.LOGIN_SUCCESS,
+      //   payload: {
+      //     token,
+      //     user,
+      //   },
+      // });
+    })
+  }
+
+  const responseErrorGoogle = (response) => {
+    //console.log(response);
+  }
+
+
+  return (
+    <Fragment>
+      <div className="text-center text-2xl mb-6">Login</div>
+      {layoutData.loginSignupError ? (
+        <div className="bg-red-200 py-2 px-4 rounded">
+          You need to login for checkout. Haven't accont? Create new one.
+        </div>
+      ) : (
+        ""
+      )}
+      <form className="space-y-4">
+        <div className="flex flex-col">
+          <label htmlFor="name">
+            Username or email address
+            <span className="text-sm text-gray-600 ml-1">*</span>
+          </label>
+          <input
+            onChange={(e) => {
+              setData({ ...data, email: e.target.value, error: false });
+              layoutDispatch({ type: "loginSignupError", payload: false });
+            }}
+            value={data.email}
+            type="text"
+            id="name"
+            className={`${!data.error ? "" : "border-red-500"
+              } px-4 py-2 focus:outline-none border`}
+          />
+          {!data.error ? "" : alert(data.error)}
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="password">
+            Password<span className="text-sm text-gray-600 ml-1">*</span>
+          </label>
+          <input
+            onChange={(e) => {
+              setData({ ...data, password: e.target.value, error: false });
+              layoutDispatch({ type: "loginSignupError", payload: false });
+            }}
+            value={data.password}
+            type="password"
+            id="password"
+            className={`${!data.error ? "" : "border-red-500"
+              } px-4 py-2 focus:outline-none border`}
+          />
+          {!data.error ? "" : alert(data.error)}
+        </div>
+        <div className="flex flex-col space-y-2 md:flex-row md:justify-between md:items-center">
+          <div>
+            <input
+              type="checkbox"
+              id="rememberMe"
+              className="px-4 py-2 focus:outline-none border mr-1"
+            />
+            <label htmlFor="rememberMe">
+              Remember me<span className="text-sm text-gray-600">*</span>
+            </label>
+          </div>
+          <a className="block text-gray-600" href="/">
+            Lost your password?
+          </a>
+        </div>
+        <div
+          onClick={(e) => formSubmit()}
+          style={{ background: "#303031" }}
+          className="font-medium px-4 py-2 text-white text-center cursor-pointer"
+        >
+          Login
+        </div>
+        <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover/>
+        <div style={{textAlign:"center"}}>
+          <p style={{fontWeight:"bold"}}>Login with Google</p>
+          <GoogleLogin
+            clientId="143478304318-nricvltt50mgn1vfqo26sbqc4hvkvi7m.apps.googleusercontent.com"
+            buttonText="Login with Google"
+            onSuccess={responseSuccessGoogle}
+            onFailure={responseErrorGoogle}
+            cookiePolicy={'single_host_origin'}
+          />,
+        </div>
+      </form>
+    </Fragment>
+  );
+};
+
+export default Login;
