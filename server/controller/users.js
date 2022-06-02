@@ -84,18 +84,36 @@ class User {
   }
 
   async getDeleteUser(req, res) {
-    let { oId, status } = req.body;
-    if (!oId || !status) {
-      return res.json({ message: "All filled must be required" });
+    // let { oId, status } = req.body;
+    // if (!oId || !status) {
+    //   return res.json({ message: "All filled must be required" });
+    // } else {
+    //   let currentUser = userModel.findByIdAndUpdate(oId, {
+    //     status: status,
+    //     updatedAt: Date.now(),
+    //   });
+    //   currentUser.exec((err, result) => {
+    //     if (err) console.log(err);
+    //     return res.json({ success: "User updated successfully" });
+    //   });
+    // }
+
+    let { uId } = req.body;
+    console.log("uid",uId)
+    if (!uId) {
+      return res.json({ error: "All filled must be required" });
     } else {
-      let currentUser = userModel.findByIdAndUpdate(oId, {
-        status: status,
-        updatedAt: Date.now(),
-      });
-      currentUser.exec((err, result) => {
-        if (err) console.log(err);
-        return res.json({ success: "User updated successfully" });
-      });
+      try {
+        // let deleteProductObj = await productModel.findById(pId);
+        let deleteUser = await userModel.findByIdAndDelete(uId);
+        if (deleteUser) {
+          // Delete Image from uploads -> products folder
+          // Product.deleteImages(deleteProductObj.pImages, "string");
+          return res.json({ success: "User deleted successfully" });
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 
