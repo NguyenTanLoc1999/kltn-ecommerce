@@ -70,7 +70,7 @@ const AdminNavber = (props) => {
         </div>
         {/* Both Screen show */}
         <div className="flex items-center">
-          <div className="hover:bg-gray-200 rounded-lg p-2" title="Search">
+          {/* <div className="hover:bg-gray-200 rounded-lg p-2" title="Search">
             <svg
               className="cursor-pointer w-8 h-8 text-gray-600 hover:text-gray-800"
               fill="none"
@@ -101,7 +101,7 @@ const AdminNavber = (props) => {
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-          </div>
+          </div> */}
           {/* Logout Button Dropdown */}
           <div
             className="userDropdownBtn hover:bg-gray-200 px-2 py-2 rounded-lg relative"
