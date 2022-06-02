@@ -168,7 +168,7 @@ class Auth {
             }else{
               let password=email+JWT_SECRET;
               let newUser = new userModel({
-                name: response.payload.given_name,
+                name: response.payload.name,
                 email: response.payload.email,
                 password: password,
                 userRole: 0,
