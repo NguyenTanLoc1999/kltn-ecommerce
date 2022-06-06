@@ -39,12 +39,13 @@ const AllUsers = (props) => {
   };
 
   /* This method call the editmodal & dispatch user context */
-  const editUsers = (uId, name, password, userRole, phoneNumber, type) => {
+  const editUsers = (uId, name, email, password, userRole, phoneNumber, type) => {
     if (type) {
       dispatch({
         type: "editUserModalOpen",
         uId: uId,
         name: name,
+        email:email,
         password: password,
         userRole: userRole,
         phoneNumber: phoneNumber
@@ -96,8 +97,8 @@ const AllUsers = (props) => {
                 return (
                   <UserTable
                     user={item}
-                    editUser={(uId, name, password, userRole, phoneNumber, type) =>
-                      editUsers(uId, name, password, userRole, phoneNumber, type)
+                    editUser={(uId, name,email, password, userRole, phoneNumber, type) =>
+                      editUsers(uId, name, email, password, userRole, phoneNumber, type)
                     }
                     delUser={(uId) => deleteUserReq(uId)}
                     key={key}
@@ -137,12 +138,12 @@ const UserTable = ({ user, delUser, editUser }) => {
             user.name}
         </td>
         <td className="p-2 text-left">
-          {user.email.length > 30
+          {user.email?.length > 30
             ? user.email.slice(0, 30) + "..."
             : user.email}
         </td>
         <td className="p-2 text-left">
-          {user.password.length > 30
+          {user.password?.length > 30
             ? user.password.slice(0, 30) + "..."
             : user.password}
         </td>

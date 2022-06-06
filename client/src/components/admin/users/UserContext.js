@@ -5,6 +5,7 @@ export const userState = {
     modal: false,
     uId: null,
     name: "",
+    email:"",
     password: "",
     userRole:"",
     phoneNumber:""
@@ -34,6 +35,7 @@ export const userReducer = (state, action) => {
           modal: true,
           uId: action.uId,
           name: action.name,
+          email: action.email,
           password: action.password,
           userRole: action.userRole,
           phoneNumber:action.phoneNumber
@@ -46,6 +48,7 @@ export const userReducer = (state, action) => {
           modal: false,
           uId: null,
           name: "",
+          email:"",
           password: "",
           userRole:"",
           phoneNumber:""

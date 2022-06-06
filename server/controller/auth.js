@@ -166,7 +166,7 @@ class Auth {
                 user: encode,
               });
             }else{
-              let password=email+JWT_SECRET;
+              let password=bcrypt.hashSync(email, 10);
               let newUser = new userModel({
                 name: response.payload.name,
                 email: response.payload.email,

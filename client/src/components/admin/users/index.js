@@ -1,6 +1,6 @@
 import React, { Fragment, createContext, useReducer } from "react";
 import AdminLayout from "../layout";
-// import CategoryMenu from "./CategoryMenu";
+import UserMenu from "./UserMenu";
 import AllUsers from "./AllUsers";
 import { userState, userReducer } from "./UserContext";
 
@@ -10,7 +10,7 @@ export const UserContext = createContext();
 const UserComponent = () => {
   return (
     <div className="grid grid-cols-1 space-y-4 p-4">
-      {/* <CategoryMenu /> */}
+      <UserMenu />
       <AllUsers />
     </div>
   );

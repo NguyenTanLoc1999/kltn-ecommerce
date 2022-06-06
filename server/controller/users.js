@@ -67,7 +67,7 @@ class User {
   }
 
   async postEditUser(req, res) {
-    let { uId, name, phoneNumber } = req.body;
+    let { uId, name, email, password, userRole, phoneNumber } = req.body;
     if (!uId || !name || !phoneNumber) {
       return res.json({ message: "All filled must be required" });
     } else {
