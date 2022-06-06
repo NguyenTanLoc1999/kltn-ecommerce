@@ -61,7 +61,10 @@ const SingleProduct = (props) => {
       {products && products.length > 0 ? (
         products.map((item, index) => {
           return (
-            <Fragment key={index}>
+            <>
+            {
+              products[index].pStatus === "Active" ? (
+                <Fragment key={index}>
               <div className="relative col-span-1 m-2">
                 <img
                   onClick={(e) => history.push(`/products/${item._id}`)}
@@ -134,6 +137,9 @@ const SingleProduct = (props) => {
                 {/* WhisList Logic End */}
               </div>
             </Fragment>
+              ) : null
+            }
+            </>
           );
         })
       ) : (

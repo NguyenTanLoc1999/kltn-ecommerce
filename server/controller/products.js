@@ -162,17 +162,36 @@ class Product {
     }
   }
 
+  // async getDeleteProduct(req, res) {
+  //   let { pId } = req.body;
+  //   if (!pId) {
+  //     return res.json({ error: "All filled must be required" });
+  //   } else {
+  //     try {
+  //       let deleteProductObj = await productModel.findById(pId);
+  //       let deleteProduct = await productModel.findByIdAndDelete(pId);
+  //       if (deleteProduct) {
+  //         // Delete Image from uploads -> products folder
+  //         Product.deleteImages(deleteProductObj.pImages, "string");
+  //         return res.json({ success: "Product deleted successfully" });
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // }
+  //delete change pstatus to disabled
   async getDeleteProduct(req, res) {
-    let { pId } = req.body;
+    let { pId, pStatus } = req.body;
     if (!pId) {
       return res.json({ error: "All filled must be required" });
     } else {
       try {
-        let deleteProductObj = await productModel.findById(pId);
-        let deleteProduct = await productModel.findByIdAndDelete(pId);
-        if (deleteProduct) {
-          // Delete Image from uploads -> products folder
-          Product.deleteImages(deleteProductObj.pImages, "string");
+        let updateStatusProduct = await productModel.findByIdAndUpdate(pId,{
+          pStatus
+        });
+        let edit = await updateStatusProduct.exec();
+        if (edit) {
           return res.json({ success: "Product deleted successfully" });
         }
       } catch (err) {

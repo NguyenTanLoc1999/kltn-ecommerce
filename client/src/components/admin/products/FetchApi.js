@@ -79,9 +79,11 @@ export const editProduct = async (product) => {
   }
 };
 
-export const deleteProduct = async (pId) => {
+
+//dang sua delete product
+export const deleteProduct = async (pId,pStatus) => {
   try {
-    let res = await axios.post(`${apiURL}/api/product/delete-product`, { pId });
+    let res = await axios.post(`${apiURL}/api/product/delete-product`, { pId,pStatus });
     return res.data;
   } catch (error) {
     console.log(error);

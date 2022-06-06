@@ -34,7 +34,10 @@ const CategoryList = () => {
         {categories && categories.length > 0 ? (
           categories.map((item, index) => {
             return (
-              <Fragment key={index}>
+              <>
+              {
+                categories[index].cStatus === "Active" ? (
+                  <Fragment key={index}>
                 <div
                   onClick={(e) =>
                     history.push(`/products/category/${item._id}`)
@@ -49,6 +52,9 @@ const CategoryList = () => {
                   <div className="font-medium">{item.cName}</div>
                 </div>
               </Fragment>
+                ) : null
+              }
+              </>
             );
           })
         ) : (
