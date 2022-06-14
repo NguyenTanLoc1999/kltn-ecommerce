@@ -14,6 +14,7 @@ const apiURL = process.env.REACT_APP_API_URL;
 export const CheckoutComponent = (props) => {
   const history = useHistory();
   const { data, dispatch } = useContext(LayoutContext);
+  console.log("data", data)
 
   const [state, setState] = useState({
     address: "",
@@ -77,7 +78,7 @@ export const CheckoutComponent = (props) => {
                   )}
                   <div className="flex flex-col py-2">
                     <label htmlFor="address" className="pb-2">
-                      Dalivery Address
+                      Delivery Address
                     </label>
                     <input
                       value={state.address}
@@ -172,39 +173,96 @@ const CheckoutProducts = ({ products }) => {
   return (
     <Fragment>
       <div className="grid grid-cols-2 md:grid-cols-1">
-        {products !== null && products.length > 0 ? (
-          products.map((product, index) => {
-            return (
-              <div
-                key={index}
-                className="col-span-1 m-2 md:py-6 md:border-t md:border-b md:my-2 md:mx-0 md:flex md:items-center md:justify-between"
-              >
-                <div className="md:flex md:items-center md:space-x-4">
-                  <img
-                    onClick={(e) => history.push(`/products/${product._id}`)}
-                    className="cursor-pointer md:h-20 md:w-20 object-cover object-center"
-                    src={`${apiURL}/uploads/products/${product.pImages[0]}`}
-                    alt="wishListproduct"
-                  />
-                  <div className="text-lg md:ml-6 truncate">
-                    {product.pName}
-                  </div>
-                  <div className="md:ml-6 font-semibold text-gray-600 text-sm">
-                    Price : ${product.pPrice}{" "}
-                  </div>
-                  <div className="md:ml-6 font-semibold text-gray-600 text-sm">
-                    Quantitiy : {quantity(product._id)}
-                  </div>
-                  <div className="font-semibold text-gray-600 text-sm">
-                    Subtotal : ${subTotal(product._id, product.pPrice)}
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <div>No product found for checkout</div>
-        )}
+        <table className="table-auto border w-full">
+          <thead>
+            <tr>
+              <th className="px-4 py-2 border">Image</th>
+              <th className="px-4 py-2 border">Product Name</th>
+              <th className="px-4 py-2 border">Price</th>
+              <th className="px-4 py-2 border">Quantity</th>
+              <th className="px-4 py-2 border">Subtotal</th>
+            </tr>
+          </thead>
+
+          {products !== null && products.length > 0 ? (
+            products.map((product, index) => {
+              return (
+                <tbody key={index}>
+                  <tr>
+                    <td className="p-2 text-left">
+                      <img
+                        onClick={(e) => history.push(`/products/${product._id}`)}
+                        className="cursor-pointer md:h-20 md:w-20 object-cover object-center"
+                        src={`${apiURL}/uploads/products/${product.pImages[0]}`}
+                        alt="wishListproduct"
+                      />
+                    </td>
+                    <td className="p-2 text-left">
+                      <div className="text-lg ">
+                        {product.pName}
+                      </div>
+                    </td>
+                    <td className="p-2 text-left text-center">
+                      {
+                        product.pOffer ? (
+                          <div className=" font-semibold text-gray-600 text-sm">
+                            ${product.pPrice-product.pPrice*product.pOffer/100}{" "}
+                          </div>
+                        ) : (
+                          <div className=" font-semibold text-gray-600 text-sm">
+                            ${product.pPrice}{" "}
+                          </div>
+                        )
+                      }
+                    </td>
+                    <td className="p-2 text-left text-center">
+                      <div className=" font-semibold text-gray-600 text-sm">
+                        {quantity(product._id)}
+                      </div>
+                    </td>
+                    <td className="p-2 text-center">
+                      <div className="font-semibold text-gray-600 text-sm">
+                        ${subTotal(product._id, product.pPrice)}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+
+
+                // <div
+                // key={index}
+                // className="col-span-1 m-2 md:py-6 md:border-t md:border-b md:my-2 md:mx-0 md:flex md:items-center md:justify-between"
+                // >
+                // <div className="md:flex md:items-center md:space-x-4">
+                // <img
+                //   onClick={(e) => history.push(`/products/${product._id}`)}
+                //   className="cursor-pointer md:h-20 md:w-20 object-cover object-center"
+                //   src={`${apiURL}/uploads/products/${product.pImages[0]}`}
+                //   alt="wishListproduct"
+                // />
+                // <div className="text-lg md:ml-6 truncate">
+                //   {product.pName}
+                // </div>
+                // <div className="md:ml-6 font-semibold text-gray-600 text-sm">
+                //   Price : ${product.pPrice}{" "}
+                // </div>
+                // <div className="md:ml-6 font-semibold text-gray-600 text-sm">
+                //   Quantitiy : {quantity(product._id)}
+                // </div>
+                // <div className="font-semibold text-gray-600 text-sm">
+                //   Subtotal : ${subTotal(product._id, product.pPrice)}
+                // </div>
+                // </div>
+                //                 </div>
+              );
+            })
+          ) : (
+            <div>No product found for checkout</div>
+          )}
+        </table>
+        <div className="text-right text-lg font-bold py-4">
+          Total: ${totalCost()}
+        </div>
       </div>
     </Fragment>
   );
