@@ -30,14 +30,17 @@ const AllProduct = (props) => {
     }, 1000);
   };
 
-  const deleteProductReq = async (pId) => {
-    let deleteC = await deleteProduct(pId);
-    if (deleteC.error) {
-      console.log(deleteC.error);
-    } else if (deleteC.success) {
-      console.log(deleteC.success);
-      fetchData();
-    }
+  const deleteProductReq = async (pId,pStatus) => {
+    let deleteC = await deleteProduct(pId,pStatus);
+    console.log("delete ok",deleteC)
+    fetchData();
+    // if (deleteC.error) {
+    //   console.log(deleteC.error);
+    //   fetchData();
+    // } else if (deleteC.success) {
+    //   console.log(deleteC.success);
+    //   fetchData();
+    // }
   };
 
   /* This method call the editmodal & dispatch product context */
@@ -98,7 +101,7 @@ const AllProduct = (props) => {
                     editProduct={(pId, product, type) =>
                       editProduct(pId, product, type)
                     }
-                    deleteProduct={(pId) => deleteProductReq(pId)}
+                    deleteProduct={(pId,pStatus) => deleteProductReq(pId,pStatus)}
                     key={key}
                   />
                 );
@@ -184,7 +187,7 @@ const ProductTable = ({ product, deleteProduct, editProduct }) => {
             </svg>
           </span>
           <span
-            onClick={(e) => deleteProduct(product._id)}
+            onClick={(e) => deleteProduct(product._id,product.pStatus)}
             className="cursor-pointer hover:bg-gray-200 rounded-lg p-2 mx-1"
           >
             <svg

@@ -188,12 +188,12 @@ class Product {
     } else {
       try {
         let updateStatusProduct = await productModel.findByIdAndUpdate(pId,{
-          pStatus
+          pStatus:"Disabled"
         });
-        let edit = await updateStatusProduct.exec();
-        if (edit) {
-          return res.json({ success: "Product deleted successfully" });
-        }
+        updateStatusProduct.exec((err) => {
+          if (err) console.log(err);
+          return res.json({ success: "Product edit successfully" });
+        });
       } catch (err) {
         console.log(err);
       }
