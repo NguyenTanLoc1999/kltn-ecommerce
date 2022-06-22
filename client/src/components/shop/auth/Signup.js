@@ -1,5 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { signupReq } from "./fetchApi";
+import {ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = (props) => {
   const [data, setData] = useState({
@@ -11,7 +13,7 @@ const Signup = (props) => {
     loading: false,
     success: false,
   });
-
+  // console.log("data",data)
   const alert = (msg, type) => (
     <div className={`text-sm text-${type}-500`}>{msg}</div>
   );
@@ -34,6 +36,7 @@ const Signup = (props) => {
         password: data.password,
         cPassword: data.cPassword,
       });
+      // console.log("responseData",responseData)
       if (responseData.error) {
         setData({
           ...data,
@@ -42,9 +45,9 @@ const Signup = (props) => {
           password: "",
           cPassword: "",
         });
-      } else if (responseData.success) {
+      } else if (responseData.message) {
         setData({
-          success: responseData.success,
+          success: responseData.message,
           name: "",
           email: "",
           password: "",
@@ -52,6 +55,7 @@ const Signup = (props) => {
           loading: false,
           error: false,
         });
+        toast.success(responseData.message)
       }
     } catch (error) {
       console.log(error);
@@ -60,9 +64,19 @@ const Signup = (props) => {
 
   return (
     <Fragment>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover/>
       <div className="text-center text-2xl mb-6">Register</div>
       <form className="space-y-4">
-        {data.success ? alert(data.success, "green") : ""}
+        {/* {data.success ? alert(data.success, "green") : ""} */}
         <div className="flex flex-col">
           <label htmlFor="name">
             Name<span className="text-sm text-gray-600 ml-1">*</span>
@@ -163,9 +177,6 @@ const Signup = (props) => {
               Remember me<span className="text-sm text-gray-600">*</span>
             </label>
           </div>
-          <a className="block text-gray-600" href="/">
-            Lost your password?
-          </a>
         </div>
         <div
           onClick={(e) => formSubmit()}

@@ -26,6 +26,7 @@ const Login = (props) => {
         email: data.email,
         password: data.password,
       });
+      // console.log("responseData",responseData)
       if (responseData.error) {
         setData({
           ...data,
@@ -33,17 +34,17 @@ const Login = (props) => {
           error: responseData.error,
           password: "",
         });
-      // toast.error("Invalid email or password")
-
       } else if (responseData.token) {
         setData({ email: "", password: "", loading: false, error: false });
         localStorage.setItem("jwt", JSON.stringify(responseData));
         window.location.href = "/";
         toast.success("Login success")
       }
+      if(responseData.message){
+        toast.error(responseData.message)
+      }
     } catch (error) {
-      console.log(error);
-      toast.error("Invalid email or password")
+      console.log(error)
     }
   };
 
@@ -59,13 +60,7 @@ const Login = (props) => {
       localStorage.setItem("jwt", JSON.stringify(data));
       window.location.href = "/";
       toast.success("Login success")
-      // dispatch({
-      //   // type: authConstants.LOGIN_SUCCESS,
-      //   payload: {
-      //     token,
-      //     user,
-      //   },
-      // });
+
     })
   }
 
@@ -79,7 +74,7 @@ const Login = (props) => {
       <div className="text-center text-2xl mb-6">Login</div>
       {layoutData.loginSignupError ? (
         <div className="bg-red-200 py-2 px-4 rounded">
-          You need to login for checkout. Haven't accont? Create new one.
+          You need to login for checkout. Haven't account? Create new one.
         </div>
       ) : (
         ""
@@ -87,7 +82,7 @@ const Login = (props) => {
       <form className="space-y-4">
         <div className="flex flex-col">
           <label htmlFor="name">
-            Username or email address
+            Email
             <span className="text-sm text-gray-600 ml-1">*</span>
           </label>
           <input

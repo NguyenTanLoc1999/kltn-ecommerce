@@ -10,4 +10,6 @@ router.post("/user", loginCheck, isAuth, isAdmin, authController.allUser);
 
 router.post('/googlelogin',authController.googlelogin)
 
+router.get("/:id/verify/:token",authController.getVerifyLink)
+
 module.exports = router;

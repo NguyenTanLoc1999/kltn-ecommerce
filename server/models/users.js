@@ -30,9 +30,13 @@ const userSchema = new mongoose.Schema(
       default: "user.png",
     },
     verified: {
-      type: String,
+      type: Boolean,
       default: false,
     },
+    // status: {
+    //   type: String,
+    //   required: true,
+    // },
     secretKey: {
       type: String,
       default: null,

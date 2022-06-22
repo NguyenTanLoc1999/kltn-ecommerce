@@ -12,6 +12,7 @@ import {
 } from "./shop";
 import { DashboardAdmin, Categories, Products, Orders, Users } from "./admin";
 import { UserProfile, UserOrders, SettingUser } from "./shop/dashboardUser";
+import EmailVerify from "./shop/emailVerify";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -29,6 +30,7 @@ const Routes = (props) => {
           path="/products/category/:catId"
           component={ProductByCategory}
         />
+        <Route exact path="/user/:id/verify/:token" component={EmailVerify} />
         <CartProtectedRoute
           exact={true}
           path="/checkout"
