@@ -36,7 +36,6 @@ const Signup = (props) => {
         password: data.password,
         cPassword: data.cPassword,
       });
-      // console.log("responseData",responseData)
       if (responseData.error) {
         setData({
           ...data,

@@ -13,6 +13,8 @@ import {
 import { DashboardAdmin, Categories, Products, Orders, Users } from "./admin";
 import { UserProfile, UserOrders, SettingUser } from "./shop/dashboardUser";
 import EmailVerify from "./shop/emailVerify";
+import ForgotPassword from "./shop/forgotPassword";
+import ResetPassword from "./shop/resetPassword";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -31,6 +33,8 @@ const Routes = (props) => {
           component={ProductByCategory}
         />
         <Route exact path="/user/:id/verify/:token" component={EmailVerify} />
+        <Route exact path="/forgot-password" component={ForgotPassword} />
+        <Route exact path="/password-reset/:id/:token" component={ResetPassword} />
         <CartProtectedRoute
           exact={true}
           path="/checkout"

@@ -7,6 +7,7 @@ const { OAuth2Client } = require('google-auth-library');
 const Token = require("../models/token");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
+const Joi = require("joi");
 
 const client = new OAuth2Client("143478304318-nricvltt50mgn1vfqo26sbqc4hvkvi7m.apps.googleusercontent.com")
 const generateJwtToken = (_id, role) => {
@@ -122,7 +123,7 @@ class Auth {
   }
 
   // Verify Link signup
-  async getVerifyLink(req,res) {
+  async getVerifyLink(req, res) {
     try {
       const user = await userModel.findOne({ _id: req.params.id });
       if (!user) return res.status(400).send({ message: "Invalid link" });
@@ -131,13 +132,13 @@ class Auth {
         token: req.params.token,
       });
       if (!token) return res.status(400).send({ message: "Invalid link" });
-      
-      await userModel.updateOne({ _id: user._id}, 
+
+      await userModel.updateOne({ _id: user._id },
         {
-          $set:{verified: true}
-         });
+          $set: { verified: true }
+        });
       await token.remove();
-  
+
       res.status(200).send({ message: "Email verified successfully" });
     } catch (error) {
       res.status(500).send({ message: "Internal Server Error" });
@@ -171,11 +172,11 @@ class Auth {
               }).save();
               const url = `${process.env.BASE_URL}/user/${data._id}/verify/${token.token}`;
               await sendEmail(data.email, "Verify Email", url);
-            } else{
+            } else {
               const url = `${process.env.BASE_URL}/user/${data._id}/verify/${token.token}`;
               await sendEmail(data.email, "Verify Email", url);
             }
-      
+
             return res
               .status(201)
               .send({ message: "Email sent to your account! Please verify" });
@@ -199,6 +200,99 @@ class Auth {
       console.log(err);
     }
   }
+
+  //reset password
+  async resetPassword(req, res) {
+    try {
+      const emailSchema = Joi.object({
+        email: Joi.string().email().required().label("Email"),
+      });
+      const { error } = emailSchema.validate(req.body);
+      if (error)
+        return res.status(400).send({ message: error.details[0].message });
+
+      let user = await userModel.findOne({ email: req.body.email });
+      if (!user)
+        return res
+          .status(409)
+          .send({ message: "Email does not exist!" });
+
+      let token = await Token.findOne({ userId: user._id });
+      if (!token) {
+        token = await new Token({
+          userId: user._id,
+          token: crypto.randomBytes(32).toString("hex"),
+        }).save();
+      }
+
+      const url = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}/`;
+      await sendEmail(user.email, "Password Reset", url);
+
+      res
+        .status(200)
+        .send({ message: "Password reset link sent to your email account" });
+    } catch (error) {
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  }
+  // verify password reset link
+  async getVerifyPasswordResetLink(req, res) {
+    try {
+      const user = await userModel.findOne({ _id: req.params.id });
+      if (!user) return res.status(400).send({ message: "Invalid link" });
+
+      const token = await Token.findOne({
+        userId: user._id,
+        token: req.params.token,
+      });
+      if (!token) return res.status(400).send({ message: "Invalid link" });
+
+      res.status(200).send({ message: "Valid Url" });
+    } catch (error) {
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  }
+
+  //  set new password
+  async newPassword(req, res) {
+    try {
+      // const passwordSchema = Joi.object({
+      // 	password: passwordComplexity().required().label("Password"),
+      // });
+      // const { error } = passwordSchema.validate(req.body);
+      // if (error)
+      // 	return res.status(400).send({ message: error.details[0].message });
+      let { password, cPassword } = req.body;
+      if ((password.length > 255) | (password.length < 8)) {
+        return res.status(400).send({ message: "Password must be 8 charecter" });
+      } if(password != cPassword) {
+        return res.status(400).send({ message: "Password doesn't match" });
+      }
+       else {
+        const user = await userModel.findOne({ _id: req.params.id });
+        if (!user) return res.status(400).send({ message: "Invalid link" });
+
+        const token = await Token.findOne({
+          userId: user._id,
+          token: req.params.token,
+        });
+        if (!token) return res.status(400).send({ message: "Invalid link" });
+
+        if (!user.verified) user.verified = true;
+
+        password = bcrypt.hashSync(password, 10);
+
+        user.password = password;
+        await user.save();
+        await token.remove();
+
+        res.status(200).send({ message: "Password reset successfully" });
+      }
+    } catch (error) {
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  }
+
 
   async googlelogin(req, res) {
     const { tokenId } = req.body;

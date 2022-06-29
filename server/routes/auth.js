@@ -12,4 +12,10 @@ router.post('/googlelogin',authController.googlelogin)
 
 router.get("/:id/verify/:token",authController.getVerifyLink)
 
+//reset password
+router.post("/password-reset",authController.resetPassword)
+router.get("/password-reset/:id/:token",authController.getVerifyPasswordResetLink)
+router.post("/password-reset/:id/:token",authController.newPassword)
+
+
 module.exports = router;
