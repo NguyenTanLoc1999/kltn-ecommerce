@@ -52,7 +52,7 @@ export const createProduct = async ({
 };
 
 export const editProduct = async (product) => {
-  console.log(product);
+  // console.log(product);
   /* Most important part for updating multiple image  */
   let formData = new FormData();
   if (product.pEditImages) {
@@ -82,7 +82,7 @@ export const editProduct = async (product) => {
 
 export const deleteProduct = async (pId,pStatus) => {
   try {
-    let res = await axios.post(`${apiURL}/api/product/delete-product`, { pId,pStatus:"Disabled" });
+    let res = await axios.post(`${apiURL}/api/product/delete-product`, { pId,pStatus });
     return res.data;
   } catch (error) {
     console.log(error);

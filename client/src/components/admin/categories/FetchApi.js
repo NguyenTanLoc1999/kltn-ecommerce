@@ -60,11 +60,11 @@ export const editCategory = async (cId, des, status) => {
   }
 };
 
-export const deleteCategory = async (cId) => {
+export const deleteCategory = async (cId, cStatus) => {
   try {
     let res = await axios.post(
       `${apiURL}/api/category/delete-category`,
-      { cId },
+      { cId, cStatus },
       Headers()
     );
     return res.data;

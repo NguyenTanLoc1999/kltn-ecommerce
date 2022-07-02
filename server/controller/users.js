@@ -98,19 +98,14 @@ class User {
     //   });
     // }
 
+    //Check lại
     let { uId } = req.body;
     console.log("uid",uId)
     if (!uId) {
       return res.json({ error: "All filled must be required" });
     } else {
       try {
-        // let deleteProductObj = await productModel.findById(pId);
-        let deleteUser = await userModel.findByIdAndDelete(uId);
-        if (deleteUser) {
-          // Delete Image from uploads -> products folder
-          // Product.deleteImages(deleteProductObj.pImages, "string");
-          return res.json({ success: "User deleted successfully" });
-        }
+
       } catch (err) {
         console.log(err);
       }

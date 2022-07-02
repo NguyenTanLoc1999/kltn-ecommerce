@@ -142,6 +142,13 @@ class Product {
         pOffer,
         pStatus,
       };
+      //console.log("editdata",editData)
+      if(editData.pQuantity == 0){
+        editData = {...editData,pQuantity:'0',pStatus:'Disabled'}
+      } 
+      if(editData.pQuantity > 0){
+        editData = {...editData,pQuantity: editData.pQuantity,pStatus:'Active'}
+      }
       if (editImages.length == 2) {
         let allEditImages = [];
         for (const img of editImages) {
@@ -182,18 +189,20 @@ class Product {
   // }
   //delete change pstatus to disabled
   async getDeleteProduct(req, res) {
+    // console.log(req.body)
     let { pId, pStatus } = req.body;
-    if (!pId) {
+    if (!pId | !pStatus) {
       return res.json({ error: "All filled must be required" });
     } else {
       try {
-        let updateStatusProduct = await productModel.findByIdAndUpdate(pId,{
-          pStatus:"Disabled"
-        });
-        updateStatusProduct.exec((err) => {
-          if (err) console.log(err);
-          return res.json({ success: "Product edit successfully" });
-        });
+        if(pStatus == 'Active'){
+          await productModel.updateOne({_id:pId},{
+            $set:{
+             pStatus:"Disabled"
+            }
+           });
+        }
+        return res.json({ success: "Product edit successfully" });
       } catch (err) {
         console.log(err);
       }

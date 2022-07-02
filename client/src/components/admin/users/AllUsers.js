@@ -143,8 +143,8 @@ const UserTable = ({ user, delUser, editUser }) => {
             : user.email}
         </td>
         <td className="p-2 text-left">
-          {user.password?.length > 30
-            ? user.password.slice(0, 30) + "..."
+          {user.password?.length > 20
+            ? user.password.replaceAll(user.password, '*************')
             : user.password}
         </td>
         <td className="p-2 text-center">

@@ -28,8 +28,8 @@ const AllCategory = (props) => {
     }, 1000);
   };
 
-  const deleteCategoryReq = async (cId) => {
-    let deleteC = await deleteCategory(cId);
+  const deleteCategoryReq = async (cId, cStatus) => {
+    let deleteC = await deleteCategory(cId, cStatus);
     if (deleteC.error) {
       console.log(deleteC.error);
     } else if (deleteC.success) {
@@ -95,7 +95,7 @@ const AllCategory = (props) => {
                     editCat={(cId, type, des, status) =>
                       editCategory(cId, type, des, status)
                     }
-                    deleteCat={(cId) => deleteCategoryReq(cId)}
+                    deleteCat={(cId, cStatus) => deleteCategoryReq(cId, cStatus)}
                     key={key}
                   />
                 );
@@ -186,7 +186,7 @@ const CategoryTable = ({ category, deleteCat, editCat }) => {
             </svg>
           </span>
           <span
-            onClick={(e) => deleteCat(category._id)}
+            onClick={(e) => deleteCat(category._id, category.cStatus)}
             className="cursor-pointer hover:bg-gray-200 rounded-lg p-2 mx-1"
           >
             <svg

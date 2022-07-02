@@ -50,10 +50,12 @@ const ForgotPasswordComponent = () => {
               {/* {error && <div className="text-xl text-red-500">{error}</div>} */}
               {/* {msg && <div className="border-green-500">{msg}</div>} */}
             </div>
-            <button type="submit" style={{ background: "blue" }}
-              className="font-medium px-4 py-2 text-white text-center cursor-pointer">
-              Submit
-            </button>
+            <div className="w-12/12 text-center">
+              <button type="submit" style={{ background: "blue" }}
+                className="font-medium px-4 py-2 text-white text-center cursor-pointer">
+                Submit
+              </button>
+            </div>
             <ToastContainer
               position="top-center"
               autoClose={5000}

@@ -27,10 +27,10 @@ const ResetPasswordComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(url, { password,cPassword });
-      console.log("data",data)
+      const { data } = await axios.post(url, { password, cPassword });
+      console.log("data", data)
       toast.success(data.message)
-      setTimeout(() => {window.location = "/"},5000)
+      setTimeout(() => { window.location = "/" }, 5000)
     } catch (error) {
       if (
         error.response &&
@@ -78,10 +78,12 @@ const ResetPasswordComponent = () => {
                   className={`px-4 py-2 focus:outline-none border`}
                 />
               </div>
-              <button type="submit" style={{ background: "blue" }}
-                className="font-medium px-4 py-2 text-white text-center cursor-pointer">
-                Submit
-              </button>
+              <div className="w-12/12 text-center">
+                <button type="submit" style={{ background: "blue" }}
+                  className="font-medium px-4 py-2 text-white text-center cursor-pointer">
+                  Submit
+                </button>
+              </div>
               <ToastContainer
                 position="top-center"
                 autoClose={5000}

@@ -76,25 +76,47 @@ class Category {
     }
   }
 
+  // async getDeleteCategory(req, res) {
+  //   let { cId } = req.body;
+  //   if (!cId) {
+  //     return res.json({ error: "All filled must be required" });
+  //   } else {
+  //     try {
+  //       let deletedCategoryFile = await categoryModel.findById(cId);
+  //       const filePath = `../server/public/uploads/categories/${deletedCategoryFile.cImage}`;
+
+  //       let deleteCategory = await categoryModel.findByIdAndDelete(cId);
+  //       if (deleteCategory) {
+  //         // Delete Image from uploads -> categories folder 
+  //         fs.unlink(filePath, (err) => {
+  //           if (err) {
+  //             console.log(err);
+  //           }
+  //           return res.json({ success: "Category deleted successfully" });
+  //         });
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // }
+
+
   async getDeleteCategory(req, res) {
-    let { cId } = req.body;
-    if (!cId) {
+    //console.log(req.body)
+    let { cId,cStatus } = req.body;
+    if (!cId | !cStatus) {
       return res.json({ error: "All filled must be required" });
     } else {
       try {
-        let deletedCategoryFile = await categoryModel.findById(cId);
-        const filePath = `../server/public/uploads/categories/${deletedCategoryFile.cImage}`;
-
-        let deleteCategory = await categoryModel.findByIdAndDelete(cId);
-        if (deleteCategory) {
-          // Delete Image from uploads -> categories folder 
-          fs.unlink(filePath, (err) => {
-            if (err) {
-              console.log(err);
+        if(cStatus == 'Active'){
+          await categoryModel.updateOne({_id:cId},{
+            $set:{
+              cStatus:"Disabled"
             }
-            return res.json({ success: "Category deleted successfully" });
-          });
+          })
         }
+        return res.json({ success: "Category edit successfully" });
       } catch (err) {
         console.log(err);
       }
