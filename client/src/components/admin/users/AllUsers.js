@@ -28,8 +28,8 @@ const AllUsers = (props) => {
     }, 1000);
   };
 
-  const deleteUserReq = async (uId) => {
-    let deleteC = await deleteUser(uId);
+  const deleteUserReq = async (uId, status) => {
+    let deleteC = await deleteUser(uId, status);
     if (deleteC.error) {
       console.log(deleteC.error);
     } else if (deleteC.success) {
@@ -39,16 +39,13 @@ const AllUsers = (props) => {
   };
 
   /* This method call the editmodal & dispatch user context */
-  const editUsers = (uId, name, email, password, userRole, phoneNumber, type) => {
+  const editUsers = (uId, userRole, status, type) => {
     if (type) {
       dispatch({
         type: "editUserModalOpen",
         uId: uId,
-        name: name,
-        email:email,
-        password: password,
         userRole: userRole,
-        phoneNumber: phoneNumber
+        status: status
       });
     }
   };
@@ -85,7 +82,7 @@ const AllUsers = (props) => {
               <th className="px-4 py-2 border">Password</th>
               <th className="px-4 py-2 border">userRole</th>
               <th className="px-4 py-2 border">Phone</th>
-              {/* <th className="px-4 py-2 border">Status</th> */}
+              <th className="px-4 py-2 border">Status</th>
               <th className="px-4 py-2 border">Created at</th>
               <th className="px-4 py-2 border">Updated at</th>
               <th className="px-4 py-2 border">Actions</th>
@@ -97,10 +94,10 @@ const AllUsers = (props) => {
                 return (
                   <UserTable
                     user={item}
-                    editUser={(uId, name,email, password, userRole, phoneNumber, type) =>
-                      editUsers(uId, name, email, password, userRole, phoneNumber, type)
+                    editUser={(uId,userRole, status, type) =>
+                      editUsers(uId, userRole, status, type)
                     }
-                    delUser={(uId) => deleteUserReq(uId)}
+                    delUser={(uId, status) => deleteUserReq(uId, status)}
                     key={key}
                   />
                 );
@@ -160,17 +157,17 @@ const UserTable = ({ user, delUser, editUser }) => {
             alt=""
           />
         </td> */}
-        {/* <td className="p-2 text-center">
-          {user.cStatus === "Active" ? (
+        <td className="p-2 text-center">
+          {user.status === "Active" ? (
             <span className="bg-green-200 rounded-full text-center text-xs px-2 font-semibold">
-              {user.cStatus}
+              {user.status}
             </span>
           ) : (
             <span className="bg-red-200 rounded-full text-center text-xs px-2 font-semibold">
-              {user.cStatus}
+              {user.status}
             </span>
           )}
-        </td> */}
+        </td>
         <td className="p-2 text-center">
           {moment(user.createdAt).format("lll")}
         </td>
@@ -182,11 +179,8 @@ const UserTable = ({ user, delUser, editUser }) => {
             onClick={(e) =>
               editUser(
                 user._id,
-                user.name,
-                user.email,
-                user.password,
                 user.userRole,
-                user.phoneNumber,
+                user.status,
                 true
               )
             }
@@ -207,7 +201,7 @@ const UserTable = ({ user, delUser, editUser }) => {
             </svg>
           </span>
           <span
-            onClick={(e) => delUser(user._id)}
+            onClick={(e) => delUser(user._id, user.status)}
             className="cursor-pointer hover:bg-gray-200 rounded-lg p-2 mx-1"
           >
             <svg

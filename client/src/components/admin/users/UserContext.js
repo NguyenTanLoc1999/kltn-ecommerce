@@ -4,11 +4,8 @@ export const userState = {
   editUserModal: {
     modal: false,
     uId: null,
-    name: "",
-    email:"",
-    password: "",
     userRole:"",
-    phoneNumber:""
+    status:""
   },
   loading: false,
 };
@@ -34,11 +31,8 @@ export const userReducer = (state, action) => {
         editUserModal: {
           modal: true,
           uId: action.uId,
-          name: action.name,
-          email: action.email,
-          password: action.password,
           userRole: action.userRole,
-          phoneNumber:action.phoneNumber
+          status:action.status
         },
       };
     case "editUserModalClose":
@@ -47,11 +41,8 @@ export const userReducer = (state, action) => {
         editUserModal: {
           modal: false,
           uId: null,
-          name: "",
-          email:"",
-          password: "",
           userRole:"",
-          phoneNumber:""
+          status:""
         },
       };
     case "loading":

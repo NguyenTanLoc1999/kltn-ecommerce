@@ -67,19 +67,25 @@ class User {
   }
 
   async postEditUser(req, res) {
-    let { uId, name, email, password, userRole, phoneNumber } = req.body;
-    if (!uId || !name || !phoneNumber) {
-      return res.json({ message: "All filled must be required" });
-    } else {
-      let currentUser = userModel.findByIdAndUpdate(uId, {
-        name: name,
-        phoneNumber: phoneNumber,
-        updatedAt: Date.now(),
-      });
-      currentUser.exec((err, result) => {
-        if (err) console.log(err);
-        return res.json({ success: "User updated successfully" });
-      });
+    let { uId, userRole, status } = req.body;
+    //console.log(req.body)
+    // if (!uId | !userRole | !status) {
+    //   return res.json({ message: "All filled must be required" });
+    // } 
+    try{
+      {
+        let currentUser = userModel.findByIdAndUpdate(uId, {
+          userRole,
+          status,
+          updatedAt: Date.now(),
+        });
+        let edit = await currentUser.exec();
+      if (edit) {
+        return res.json({ success: "User edit successfully" });
+      }
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -99,13 +105,20 @@ class User {
     // }
 
     //Check lại
-    let { uId } = req.body;
-    console.log("uid",uId)
-    if (!uId) {
+    let { uId,status } = req.body;
+    //console.log("uid",uId)
+    if (!uId | !status) {
       return res.json({ error: "All filled must be required" });
     } else {
       try {
-
+        if(status == 'Active'){
+          await userModel.updateOne({_id:uId},{
+            $set:{
+              status:"Disabled"
+            }
+          })
+        }
+        return res.json({ success: "Unblock user successful" });
       } catch (err) {
         console.log(err);
       }

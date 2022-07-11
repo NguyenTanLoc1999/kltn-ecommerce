@@ -46,8 +46,8 @@ export const getAllUser = async () => {
 //   }
 // };
 
-export const editUser = async (uId, name, email, password, userRole, phone) => {
-  let data = { uId: uId, name: name, email: email, password: password, userRole: userRole, phone: phone};
+export const editUser = async (uId, userRole, status) => {
+  let data = { uId: uId, userRole: userRole, status: status};
   try {
     let res = await axios.post(
       `${apiURL}/api/user/edit-user`,
@@ -60,11 +60,11 @@ export const editUser = async (uId, name, email, password, userRole, phone) => {
   }
 };
 
-export const deleteUser = async (uId) => {
+export const deleteUser = async (uId,status) => {
   try {
     let res = await axios.post(
       `${apiURL}/api/user/delete-user`,
-      { uId },
+      { uId,status },
       Headers()
     );
     return res.data;

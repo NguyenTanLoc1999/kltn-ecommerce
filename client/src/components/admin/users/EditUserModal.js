@@ -6,20 +6,14 @@ const EditUserModal = (props) => {
   const { data, dispatch } = useContext(UserContext);
 
   const [uId, setUid] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
+  const [status, setStatus] = useState("");
   const [userRole, setUserRole] = useState("");
 
 
   useEffect(() => {
-    setName(data.editUserModal.name);
     setUserRole(data.editUserModal.userRole);
     setUid(data.editUserModal.uId);
-    setEmail(data.editUserModal.email);
-    setPassword(data.editUserModal.password);
-    setPhone(data.editUserModal.phoneNumber);
+    setStatus(data.editUserModal.status);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.editUserModal.modal]);
@@ -36,7 +30,7 @@ const EditUserModal = (props) => {
 
   const submitForm = async () => {
     dispatch({ type: "loading", payload: true });
-    let edit = await editUser(uId, name, email, password, userRole, phone);
+    let edit = await editUser(uId, userRole, status);
     if (edit.error) {
       console.log(edit.error);
       dispatch({ type: "loading", payload: false });
@@ -49,7 +43,7 @@ const EditUserModal = (props) => {
       }, 1000);
     }
   };
-
+  // console.log("data",data)
   return (
     <Fragment>
       {/* Black Overlay */}
@@ -92,7 +86,7 @@ const EditUserModal = (props) => {
               </svg>
             </span>
           </div>
-          <div className="flex flex-col space-y-1 w-full">
+          {/* <div className="flex flex-col space-y-1 w-full">
             <label htmlFor="name">User Name</label>
             <input
               value={name}
@@ -127,21 +121,26 @@ const EditUserModal = (props) => {
               cols={5}
               rows={5}
             />
-          </div>
+          </div> */}
 
           <div className="w-full">
             <div className="flex space-x-1 py-4">
               <div className="w-1/2 flex flex-col space-y-1 space-x-1">
-                <label htmlFor="phone">Phone Number</label>
-                <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                <label htmlFor="status">Status</label>
+                <select
+                  value={status}
+                  name="status"
+                  onChange={(e) => setStatus(e.target.value)}
                   className="px-4 py-2 border focus:outline-none"
-                  name="phone"
-                  id="phone"
-                  cols={5}
-                  rows={5}
-                />
+                  id="status"
+                >
+                  <option name="status" value="Active">
+                  Active
+                  </option>
+                  <option name="status" value="Disabled">
+                  Disabled
+                  </option>
+                </select>
               </div>
               <div className="w-1/2 flex flex-col space-y-1 space-x-1">
                 <label htmlFor="userRole">User Role</label>
@@ -153,10 +152,10 @@ const EditUserModal = (props) => {
                   id="userRole"
                 >
                   <option name="userRole" value="0">
-                    user
+                    User
                   </option>
                   <option name="userRole" value="1">
-                    admin
+                    Admin
                   </option>
                 </select>
               </div>

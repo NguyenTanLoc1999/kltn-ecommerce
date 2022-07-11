@@ -81,6 +81,7 @@ class Auth {
                 name,
                 email,
                 password,
+                status: "Active",
                 // ========= Here role 1 for admin signup role 0 for customer signup =========
                 userRole: 0, // Field Name change to userRole from role
               });
@@ -180,6 +181,11 @@ class Auth {
             return res
               .status(201)
               .send({ message: "Email sent to your account! Please verify" });
+          }
+          if(data.status === "Disabled"){
+            return res
+              .status(201)
+              .send({ message: "Account blocking!" });
           }
           const token = jwt.sign(
             { _id: data._id, role: data.userRole },
@@ -321,6 +327,7 @@ class Auth {
                   name: response.payload.name,
                   email: response.payload.email,
                   password: password,
+                  status: "Active",
                   userRole: 0,
                   userImage: response.picture
                 });
