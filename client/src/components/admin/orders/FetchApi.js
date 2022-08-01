@@ -21,8 +21,8 @@ export const editCategory = async (oId, status) => {
   }
 };
 
-export const deleteOrder = async (oId) => {
-  let data = { oId: oId };
+export const deleteOrder = async (oId,status) => {
+  let data = { oId: oId ,status: status};
   try {
     let res = await axios.post(`${apiURL}/api/order/delete-order`, data);
     return res.data;

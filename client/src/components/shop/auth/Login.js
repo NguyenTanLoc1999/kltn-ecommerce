@@ -52,7 +52,7 @@ const Login = (props) => {
     //console.log(response);
     axios({
       method:"POST",
-      url:"http://localhost:8000/api/googlelogin",
+      url:`${process.env.REACT_APP_API_URL}/api/googlelogin`,
       data:{tokenId: response.tokenId}
     }).then(response =>{
       const { data } = response

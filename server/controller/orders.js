@@ -1,4 +1,5 @@
 const orderModel = require("../models/orders");
+const productModel = require("../models/products");
 
 class Order {
   async getAllOrders(req, res) {
@@ -84,20 +85,40 @@ class Order {
   }
 
   async postDeleteOrder(req, res) {
-    let { oId } = req.body;
-    if (!oId) {
+    let { oId,status } = req.body;
+    if (!oId | !status) {
       return res.json({ error: "All filled must be required" });
     } else {
       try {
-        let deleteOrder = await orderModel.findByIdAndDelete(oId);
-        if (deleteOrder) {
-          return res.json({ success: "Order deleted successfully" });
+        if(status != 'Delivered'){
+          await orderModel.updateOne({_id:oId},{
+            $set:{
+              status:"Cancelled"
+            }
+          })
         }
+          return res.json({ success: "Order deleted successfully" });
       } catch (error) {
         console.log(error);
       }
     }
   }
+
+  // async postDeleteOrder(req, res) {
+  //   let { oId } = req.body;
+  //   if (!oId) {
+  //     return res.json({ error: "All filled must be required" });
+  //   } else {
+  //     try {
+  //       let deleteOrder = await orderModel.findByIdAndDelete(oId);
+  //       if (deleteOrder) {
+  //         return res.json({ success: "Order deleted successfully" });
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // }
 }
 
 const ordersController = new Order();

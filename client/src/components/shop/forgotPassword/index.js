@@ -74,7 +74,11 @@ const ForgotPasswordComponent = () => {
 }
 
 const ForgotPassword = () => {
-  return <Layout children={<ForgotPasswordComponent />} />;
+  return (
+  <Fragment>
+    <Layout children={<ForgotPasswordComponent />} />
+  </Fragment>
+  );
 };
 
 export default ForgotPassword;

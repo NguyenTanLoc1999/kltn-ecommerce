@@ -22,8 +22,8 @@ export const editOrderReq = (oId, type, status, dispatch) => {
   }
 };
 
-export const deleteOrderReq = async (oId, dispatch) => {
-  let responseData = await deleteOrder(oId);
+export const deleteOrderReq = async (oId,status, dispatch) => {
+  let responseData = await deleteOrder(oId,status);
   console.log(responseData);
   if (responseData && responseData.success) {
     fetchData(dispatch);

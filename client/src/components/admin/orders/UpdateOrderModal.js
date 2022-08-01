@@ -114,7 +114,7 @@ const UpdateOrderModal = (props) => {
               onClick={(e) => submitForm()}
               className="rounded-full bg-gray-800 text-gray-100 text-lg font-medium py-2"
             >
-              Update category
+              Update Order
             </button>
           </div>
         </div>

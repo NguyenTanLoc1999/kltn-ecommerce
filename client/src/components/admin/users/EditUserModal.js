@@ -43,7 +43,7 @@ const EditUserModal = (props) => {
       }, 1000);
     }
   };
-  // console.log("data",data)
+
   return (
     <Fragment>
       {/* Black Overlay */}
