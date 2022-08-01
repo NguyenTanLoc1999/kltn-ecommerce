@@ -27,3 +27,4 @@ uploads
 images
 package-lock.json
 img
+.vercel
