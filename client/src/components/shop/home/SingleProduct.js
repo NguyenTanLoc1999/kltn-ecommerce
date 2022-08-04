@@ -101,14 +101,14 @@ const SingleProduct = (props) => {
                 {
                   item.pOffer > 0 ? (
                     <>
-                    <div className="text-xl tracking-wider text-red-700">${item.pPrice - (item.pPrice*item.pOffer/100)}</div>
+                    <div className="text-2xl tracking-wider text-red-700">${item.pPrice - (item.pPrice*item.pOffer/100)}</div>
                     <div className=" flex">
                       <div className="line-through">${item.pPrice}</div>
                       <div className="sm:font-bold">&nbsp;-{item.pOffer}%</div>
                     </div>
                     </>
                   ) :(
-                    <div className="text-xl tracking-wider text-red-700">${item.pPrice}</div>
+                    <div className="text-2xl tracking-wider text-red-700">${item.pPrice}</div>
                   )
                 }
                 {/* WhisList Logic  */}

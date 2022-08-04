@@ -181,7 +181,7 @@ const ProductDetailsSection = (props) => {
                   sProduct.pOffer > 0 ? (
                     <>
                       <div className="flex-col">
-                        <div className="text-xl tracking-wider text-red-700">${sProduct.pPrice - (sProduct.pPrice * sProduct.pOffer / 100)}</div>
+                        <div className="text-2xl tracking-wider text-red-700">${sProduct.pPrice - (sProduct.pPrice * sProduct.pOffer / 100)}</div>
                         <div className=" flex">
                           <div className="line-through">${sProduct.pPrice}</div>
                           <div className="sm:font-bold">&nbsp;-{sProduct.pOffer}%</div>
@@ -189,7 +189,7 @@ const ProductDetailsSection = (props) => {
                       </div>
                     </>
                   ) : (
-                    <div className="text-xl tracking-wider text-red-700">${sProduct.pPrice}</div>
+                    <div className="text-2xl tracking-wider text-red-700">${sProduct.pPrice}</div>
                   )
                 }
                 <span>
